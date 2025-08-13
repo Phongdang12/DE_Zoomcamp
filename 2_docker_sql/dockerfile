@@ -1,0 +1,14 @@
+FROM python:3.12
+
+# RUN apt-get install wget
+RUN apt-get install wget
+RUN pip install pandas sqlalchemy psycopg2
+
+WORKDIR /app
+# để đưa file vào thư mục /app trong container(phải đưa file vào để nó có thông tin)
+
+COPY  ingest_data.py ingest_data.py
+COPY  ingest_zones.py ingest_zones.py
+COPY  yellow_tripdata_2021-01.csv yellow_tripdata_2021-01.csv
+
+ENTRYPOINT [ "python" ]
