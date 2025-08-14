@@ -18,28 +18,29 @@ docker run -it \
     dpage/pgadmin4
 
   python ingest_data.py \
-    --user=root \
-    --password=root \
+    --user=postgres \
+    --password=postgres \
     --host=localhost \
     --port=5432 \
     --db=ny_taxi \
-    --table=yellow_taxi_trip
+    --table=green_taxi_trip
     # Bị cấm nên tải về sẵn luôn
     # --url https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-01.parquet
 
 
-  docker build -t taxi_ingest:latest . # built image từ Dockerfile
-
-# build container and run it in network pg-network
-  docker run -it \
-  --network=pg-network \
-  taxi_ingest:latest \
-    --user=root \
-    --password=root \
-    --host=pg-database \
+  python ingest_zones.py \
+    --user=postgres \
+    --password=postgres \
+    --host=localhost \
     --port=5432 \
     --db=ny_taxi \
-    --table=yellow_taxi_trips
+    --table=zones \
+    --url=https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv
+
+
+  docker build -t taxi_ingest:latest . # built image từ Dockerfile
+
+
 
 docker-compose build --no-cache
 docker-compose up -d : chạy ngầm ko log->làm đc lệnh khác
